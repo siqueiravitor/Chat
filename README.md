@@ -1,28 +1,30 @@
-COMO RODAR O PROJETO BAIXADO
-Instalar todas as dependências indicada pelo package.json
-### npm install
+## COMO RODAR O PROJETO BAIXADO
 
-Rodar o projeto React
-### npm start
+### Instalar todas as dependências indicada pelo package.json
+npm install
 
-SEQUENCIA PARA CRIAR O PROJETO
-Criar o projeto React - https://pt-br.reactjs.org/docs/create-a-new-react-app.html
-### npx create-react-app {nome}
+### Rodar o projeto React
+npm start
 
-Acessar o diretório do projeto
-### cd {nome}
+## SEQUÊNCIA PARA CRIAR O PROJETO
 
-Rodar o projeto React 
-### npm start
+### Criar o projeto React - https://pt-br.reactjs.org/docs/create-a-new-react-app.html
+npx create-react-app {nome}
 
-Socket.IO é uma biblioteca JavaScript para aplicativos web em tempo real
-### npm install socket.io-client
+### Acessar o diretório do projeto
+cd {nome}
 
-Transforma o CSS em componente
-### npm install --save styled-components
+### Rodar o projeto React 
+npm start
 
-Realizar chamada para a API
-### npm install --save axios
+### Socket.IO é uma biblioteca JavaScript para aplicativos web em tempo real
+npm install socket.io-client
 
-Criar o Scroll
-### npm install --save react-scroll-to-bottom
+### Transforma o CSS em componente
+npm install --save styled-components
+
+### Realizar chamada para a API
+npm install --save axios
+
+### Criar o Scroll
+npm install --save react-scroll-to-bottom
