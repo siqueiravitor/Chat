@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+body {
+  font-family: "Poppings", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding: 0 10px
+}
+
+.scrollMsg {
+  height: 570px;
+  width: 100%;
+}
