@@ -7,7 +7,7 @@
 
 <h1> Cadastro de email </h1>
 <p align="center">
-  <img src="/imagens/cadastroEmail.jpeg"> 
+  <img src="/imagens/cadastroEmail.png"> 
 </p>
 
 <h1> Cadastro de sala </h1>
