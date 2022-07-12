@@ -1,3 +1,26 @@
+# Chat
+
+<h1> Tela Inicial </h1>
+<p align="center">
+  <img src="/imagens/home.png"> 
+</p>
+
+<h1> Cadastro de email </h1>
+<p align="center">
+  <img src="/imagens/cadastroEmail.jpeg"> 
+</p>
+
+<h1> Cadastro de sala </h1>
+<p align="center">
+  <img src="/imagens/cadastroSala.png"> 
+</p>
+
+<h1> Tela de Chat </h1>
+<p align="center">
+  <img src="/imagens/chat_1.png"> 
+  <img src="/imagens/chat_2.png"> 
+</p>
+
 ## COMO RODAR O PROJETO BAIXADO
 
 ### Instalar todas as dependências indicada pelo package.json
