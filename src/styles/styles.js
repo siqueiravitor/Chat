@@ -57,6 +57,24 @@ export const Select = styled.select`
     border: 1px solid #ccc;
 `;
 
+export const BtnArea = styled.div`
+    display: flex;
+    justify-content: center;
+    `;
+export const BtnContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+export const BtnContainerLabel = styled.div`
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    padding: 10px 0;
+    border-top: 1px solid #e6e6e6;
+    color: #6fbced;
+`;
 export const BtnAcessar = styled.button`
     border: none;
     color: #fff;
@@ -66,6 +84,16 @@ export const BtnAcessar = styled.button`
     cursor: pointer;
     padding: 10px;
     margin-top: 13px;
+`;
+export const BtnCadastrar = styled.button`
+    border: none;
+    color: #fff;
+    font-size: 17px;
+    background: #6fbc0d; 
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    width: 40%;
 `;
 
 export const ConteudoChat = styled.header`

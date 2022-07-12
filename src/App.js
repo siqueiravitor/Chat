@@ -6,7 +6,7 @@ import {
   Container, Conteudo, Header, Form, Campo, Label, Input, Select,
   BtnAcessar, HeaderChat, ImgUsuario, NomeUsuario, ChatBox, ConteudoChat,
   MsgEnviada, DetMsgEnviada, TextMsgEnviada, MsgRecebida, DetMsgRecebida,
-  TextMsgRecebida, EnviarMsg, CampoMsg, BtnEnviarMsg, AlertaErro
+  TextMsgRecebida, EnviarMsg, CampoMsg, BtnEnviarMsg, AlertaErro, BtnCadastrar, BtnArea, BtnContainer, BtnContainerLabel
 } from './styles/styles';
 
 import api from './config/api';
@@ -17,6 +17,7 @@ function App() {
 
   const ENDPOINT = "http://localhost:8080/";
 
+  const [area, setArea] = useState('login');
   const [logado, setLogado] = useState(false);
   const [usuarioId, setUsuarioId] = useState('');
   const [nome, setNome] = useState('');
@@ -24,9 +25,9 @@ function App() {
   const [sala, setSala] = useState('');
   const [salas, setSalas] = useState([]);
 
-  // const [logado, setLogado] = useState(true);
-  // const [nome, setNome] = useState("Vitor Siqueira");
-  // const [sala, setSala] = useState(1);
+  const [cadastroNome, setCadastroNome] = useState('');
+  const [cadastroEmail, setCadastroEmail] = useState('');
+  const [cadastroSala, setCadastroSala] = useState('');
 
   const [mensagem, setMensagem] = useState('');
   const [listaMensagem, setListaMensagem] = useState([]);
@@ -67,6 +68,56 @@ function App() {
       })
   }
 
+  const cadastrarEmail = async e => {
+    e.preventDefault();
+    const headers = {
+      'Content-Type': 'application/json'
+    }
+
+    await api.post('/cadastrar-usuario', { nome: cadastroNome, email: cadastroEmail }, { headers })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          setStatus({
+            type: 'erro',
+            mensagem: err.response.data.mensagem
+          })
+        } else {
+          setStatus({
+            type: 'erro',
+            mensagem: 'Erro no servidor'
+          })
+
+        }
+      })
+  }
+  const cadastrarSala = async e => {
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+
+    await api.post('/cadastrar-sala', { nome: cadastroSala }, { headers })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response)
+          setStatus({
+            type: 'erro',
+            mensagem: err.response.data.mensagem
+          })
+        } else {
+          setStatus({
+            type: 'erro',
+            mensagem: 'Erro no servidor'
+          })
+
+        }
+      })
+  }
   const conectarSala = async e => {
     e.preventDefault();
     console.log('Acessou a sala ' + sala + " com o email " + email)
@@ -142,101 +193,183 @@ function App() {
 
   }
 
-  return (
-    <Container>
-      {!logado ?
+  if (area === 'login') {
+    return (
+      <Container>
+        {!logado ?
+          <Conteudo>
+            <Header>Meu Chat</Header>
+            <Form onSubmit={conectarSala}>
+              {status.type === 'erro' ?
+                <AlertaErro>
+                  {status.mensagem}
+                </AlertaErro>
+                :
+                ""
+              }
+              <Campo>
+                <Label>Email:</Label>
+                <Input type="text"
+                  placeholder='Email'
+                  name="email"
+                  value={email}
+                  autoComplete={'off'}
+                  onChange={(text) => { setEmail(text.target.value) }}
+                />
+              </Campo>
+
+              <Campo>
+                <Label>Sala:</Label>
+                <Select name="sala" value={sala} onChange={(text) => setSala(text.target.value)}>
+                  <option value="">Selecione</option>
+                  {
+                    salas.map((sala) => {
+                      return (
+                        <option value={sala.id} key={sala.id}>{sala.nome}</option>
+                      )
+                    })
+                  }
+                </Select>
+              </Campo>
+
+              <BtnArea>
+                <BtnAcessar>Acessar</BtnAcessar>
+              </BtnArea>
+            </Form>
+
+            <BtnContainerLabel> Cadastrar</BtnContainerLabel>
+            <BtnContainer>
+              <BtnCadastrar type='button' onClick={() => setArea('email')}>Email</BtnCadastrar>
+              <BtnCadastrar type='button' onClick={() => setArea('sala')}>Sala</BtnCadastrar>
+            </BtnContainer>
+          </Conteudo>
+
+          :
+
+          <ConteudoChat>
+            <HeaderChat>
+              {/* Sala {sala} - {nome} */}
+              <ImgUsuario src='chat.png' alt='foto' />
+              <NomeUsuario>{nome}</NomeUsuario>
+            </HeaderChat>
+            <ChatBox>
+              <ScrollToBottom className='scrollMsg'>
+                {
+                  listaMensagem.map((msg, key) => {
+                    return (
+                      <div key={key}>
+                        {usuarioId === msg.usuario.id ?
+                          <MsgEnviada>
+                            <DetMsgEnviada>
+                              <TextMsgEnviada>
+                                {msg.mensagem}
+                              </TextMsgEnviada>
+                            </DetMsgEnviada>
+                          </MsgEnviada>
+                          :
+                          <MsgRecebida>
+                            <DetMsgRecebida>
+                              <TextMsgRecebida>
+                                {msg.usuario.nome + ": " + msg.mensagem}
+                              </TextMsgRecebida>
+                            </DetMsgRecebida>
+                          </MsgRecebida>
+                        }
+                      </div>
+                    )
+                  })
+                }
+              </ScrollToBottom>
+            </ChatBox>
+            <EnviarMsg onSubmit={enviarMensagem}>
+              <CampoMsg type="text" name='mensagem' placeholder='Mensagem...' value={mensagem} onChange={(text) => setMensagem(text.target.value)} />
+
+              <BtnEnviarMsg>Enviar</BtnEnviarMsg>
+            </EnviarMsg>
+          </ConteudoChat>
+        }
+      </Container>
+    );
+  } else if (area === 'email') {
+    return (
+      <Container>
         <Conteudo>
-          <Header>Meu Chat</Header>
-          <Form onSubmit={conectarSala}>
-            {status.type === 'erro' ?
-              <AlertaErro>
-                {status.mensagem}
-              </AlertaErro>
-              :
-              ""
-            }
+          <Header>Cadastrar email</Header>
+          {status.type === 'erro' ?
+            <AlertaErro>
+              {status.mensagem}
+            </AlertaErro>
+            :
+            ""
+          }
+          <Form onSubmit={cadastrarEmail}>
+
             <Campo>
+              <Label>Nome:</Label>
+              <Input type="text"
+                placeholder='nome'
+                name="nome"
+                value={cadastroNome}
+                autoComplete={'off'}
+                onChange={(text) => { setCadastroNome(text.target.value) }}
+              />
               <Label>Email:</Label>
               <Input type="text"
                 placeholder='Email'
                 name="email"
-                value={email}
+                value={cadastroEmail}
                 autoComplete={'off'}
-                onChange={(text) => { setEmail(text.target.value) }}
+                onChange={(text) => { setCadastroEmail(text.target.value) }}
               />
             </Campo>
 
+            <BtnContainer>
+              <BtnAcessar type='button' onClick={() => [setStatus('', ''), setArea('login')]}>Voltar</BtnAcessar>
+              <BtnCadastrar>Cadastrar</BtnCadastrar>
+            </BtnContainer>
+
+          </Form>
+
+        </Conteudo>
+      </Container>
+    );
+  } else if (area === 'sala') {
+    return (
+      <Container>
+        <Conteudo>
+          <Header>Cadastrar sala</Header>
+          {status.type === 'erro' ?
+            <AlertaErro>
+              {status.mensagem}
+            </AlertaErro>
+            :
+            ""
+          }
+          <Form onSubmit={cadastrarSala}>
+
             <Campo>
               <Label>Sala:</Label>
-              {/* <input type="text"
-              placeholder='Sala'
-              name="sala"
-              value={sala}
-              onChange={(text) => { setSala(text.target.value) }}
-                /> */}
-              <Select name="sala" value={sala} onChange={(text) => setSala(text.target.value)}>
-                <option value="">Selecione</option>
-                {
-                  salas.map((sala) => {
-                    return (
-                      <option value={sala.id} key={sala.id}>{sala.nome}</option>
-                    )
-                  })
-                }
-              </Select>
+              <Input type="text"
+                placeholder='Sala'
+                name="nome"
+                value={cadastroSala}
+                autoComplete={'off'}
+                onChange={(text) => { setCadastroSala(text.target.value) }}
+              />
             </Campo>
+            <BtnContainer>
+
+              <BtnAcessar type='button' onClick={() => [setStatus('', ''), setArea('login')]}>Voltar</BtnAcessar>
+              <BtnCadastrar>Cadastrar</BtnCadastrar>
+            </BtnContainer>
 
 
-            <BtnAcessar>Acessar</BtnAcessar>
           </Form>
+
         </Conteudo>
-
-        :
-
-        <ConteudoChat>
-          <HeaderChat>
-            {/* Sala {sala} - {nome} */}
-            <ImgUsuario src='foto.jpg' alt='foto' />
-            <NomeUsuario>{nome}</NomeUsuario>
-          </HeaderChat>
-          <ChatBox>
-            <ScrollToBottom className='scrollMsg'>
-              {
-                listaMensagem.map((msg, key) => {
-                  return (
-                    <div key={key}>
-                      {usuarioId === msg.usuario.id ?
-                        <MsgEnviada>
-                          <DetMsgEnviada>
-                            <TextMsgEnviada>
-                              {msg.mensagem}
-                            </TextMsgEnviada>
-                          </DetMsgEnviada>
-                        </MsgEnviada>
-                        :
-                        <MsgRecebida>
-                          <DetMsgRecebida>
-                            <TextMsgRecebida>
-                              {msg.usuario.nome + ": " + msg.mensagem}
-                            </TextMsgRecebida>
-                          </DetMsgRecebida>
-                        </MsgRecebida>
-                      }
-                    </div>
-                  )
-                })
-              }
-            </ScrollToBottom>
-          </ChatBox>
-          <EnviarMsg onSubmit={enviarMensagem}>
-            <CampoMsg type="text" name='mensagem' placeholder='Mensagem...' value={mensagem} onChange={(text) => setMensagem(text.target.value)} />
-
-            <BtnEnviarMsg>Enviar</BtnEnviarMsg>
-          </EnviarMsg>
-        </ConteudoChat>
-      }
-    </Container>
-  );
+      </Container>
+    );
+  }
 }
 
 export default App;
